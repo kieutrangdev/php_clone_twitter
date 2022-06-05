@@ -4,6 +4,7 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
 
+
         if(!empty($email) or !empty($password))
         {
             $email = $getFromU->checkInput($email);

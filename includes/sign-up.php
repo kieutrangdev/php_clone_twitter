@@ -1,81 +1,112 @@
 <?php
+    include_once ('../core/init.php');
+    $id =  $_SESSION['id'];
+    $user = $getFromU->userData($id);
 
-
-
-    if(isset($_POST['signup']))
+    if(isset($_GET['step'])===true && empty($_GET['step'])===false)
     {
-        $screenName = $_POST['screenName'];
-        $password = $_POST['password'];
-        $email = $_POST['email'];
-
-        $error = '';
-
-        if(empty($screenName) or empty($password) or empty($email))
+        if(isset($_POST['next']))
         {
-            $error = "All fields are required";
-        }
-        else {
-            $email = $getFromU->checkInput($email);
-            $password = $getFromU->checkInput($password);
-            $screenName = $getFromU->checkInput($screenName);
-            if(!filter_var($email))
-            {
-                $error = "Invalid email format";
+            $username = $getFromU->checkInput($_POST['username']);
 
-            }
-            else if(strlen($screenName) > 20)
+            if(!empty($username))
             {
-                $error = "Name must be betweet in 6-20 characters";
-
-            }
-            else if(strlen($password) < 5)
-            {
-                $error = "Password is too short";
-
-            }
-            else {
-                if($getFromU->checkEmail($email) === true)
-                {
-                    $error = "Email is already in use";
+                if(strlen($username) > 20) {
+                    $error = "Username muse be between in 6-20 characters";
+                }
+                else if ($getFromU->checkUserName($username) ===true) {
+                    $error = "Username is already teken!";
                 }
                 else {
-                    $getFromU->register($email,$screenName,$password);
-                    header("Location: home.php");
+                    $getFromU->update('users',$id,array('name'=>$username));
+                    header("Location: sign-up.php?step=2");
                 }
             }
+            else {
+                $error = "Please enter your username to choose";
+            }
         }
-    }
+     ?>
+        <!doctype html>
+        <html>
+        <head>
+            <title>twitter</title>
+            <meta charset="UTF-8" />
+            <link rel="stylesheet" href="assets/css/font/css/font-awesome.css"/>
+            <link rel="stylesheet" href="../assets/css/style-complete.css"/>
+        </head>
+        <!--Helvetica Neue-->
+        <body>
+        <div class="wrapper">
+            <!-- nav wrapper -->
+            <div class="nav-wrapper">
 
-    else {
-        $error = null;
-    }
+                <div class="nav-container">
+                    <div class="nav-second">
+                        <ul>
+                            <li><a href="#"<i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div><!-- nav second ends-->
+                </div><!-- nav container ends -->
 
+            </div><!-- nav wrapper end -->
+
+            <!---Inner wrapper-->
+            <div class="inner-wrapper">
+                <!-- main container -->
+                <div class="main-container">
+                    <!-- step wrapper-->
+                <?php if($_GET['step']=='1') { ?>
+                    <div class="step-wrapper">
+                        <div class="step-container">
+                            <form method="post">
+                                <h2>Choose a Username</h2>
+                                <h4>Don't worry, you can always change it later.</h4>
+                                <div>
+                                    <input type="text" name="username" placeholder="Username"/>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li>
+                                            <?php
+                                                if(isset($error)) echo $error
+
+                                            ?>
+
+
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <input type="submit" name="next" value="Next"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            <?php }  if($_GET['step']=='2') { ?>
+                    	<div class='lets-wrapper'>
+                            <div class='step-letsgo'>
+                                <h2>We're glad you're here, ScreenName</h2>
+                                <p>Tweety is a constantly updating stream of the coolest, most important news, media, sports, TV, conversations and more--all tailored just for you.</p>
+                                <br/>
+                                <p>
+                                    Tell us about all the stuff you love and we'll help you get set up.
+                                </p>
+                                <span>
+                                    <a href='../home.php' class='backButton'>Let's go!</a>
+                                </span>
+                            </div>
+                        </div>
+                <?php } ?>
+
+                </div><!-- main container end -->
+
+            </div><!-- inner wrapper ends-->
+        </div><!-- ends wrapper -->
+
+        </body>
+        </html>
+
+        <?php
+    }
 ?>
-
-<form method="post">
-    <div class="signup-div">
-        <h3>Sign up </h3>
-        <ul>
-            <li>
-                <input type="text" name="screenName" placeholder="Full Name" <?php if (isset($_POST['screenName'])) { ?> value="<?php echo $screenName ?> " <?php } ?> >
-
-
-
-            </li>
-            <li>
-                <input type="text" name="email" placeholder="Email" <?php if (isset($_POST['email'])) { ?> value="<?php echo $email ?> " <?php } ?> />
-            </li>
-            <li>
-                <input type="password" name="password" placeholder="Password"/>
-            </li>
-            <li>
-                <input type="submit" name="signup" Value="Signup for Twitter">
-            </li>
-        </ul>
-       <?php if (isset($error)) { ?>
-         <li class="error-li">
-          <div class="span-fp-error"><?php echo $error?></div>
-         </li>
-        <?php } ?>
-    </div>
-</form>

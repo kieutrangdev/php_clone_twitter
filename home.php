@@ -1,8 +1,11 @@
 <?php
-    include_once ('core/init.php');
-    $id =  $_SESSION['id'];
-    $user = $getFromT->userData($id);
-?>
+include_once ('core/init.php');
+$id =  $_SESSION['id'];
+    $user = $getFromU->userData($id);
+//    $getFromU->update('users', $id ,array('name'=>'Trang','email'=>'huyentrang@gmail.com','password'=>md5('password')));
+//    var_dump();
+
+    ?>
 <!--
    This template created by Meralesson.com
    This template only use for educational purpose
@@ -87,7 +90,7 @@
                                     <div class="info-body-name">
                                         <div class="in-b-name">
                                             <div><a href="<?php echo $user->name ?>"><?php echo $user->screenName ?></a></div>
-                                            <span><small><a href="PROFILE-LINK">@<?php echo $user->screenName ?></a></small></span>
+                                            <span><small><a href="<?php echo $user->name ?>">@<?php echo $user->name ?></a></small></span>
                                         </div><!-- in b name end-->
                                     </div><!-- info body name end-->
                                 </div><!-- info in body end-->

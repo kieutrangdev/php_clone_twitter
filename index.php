@@ -67,7 +67,7 @@
 
                 <!-- SignUp Section -->
                 <div class="signup-wrapper">
-                    <?php include_once 'includes/sign-up.php'?>
+                    <?php include_once 'includes/sign-up-form.php'?>
                     <!--SignUp Form here -->
                 </div>
                 <!-- SIGN UP wrapper end -->

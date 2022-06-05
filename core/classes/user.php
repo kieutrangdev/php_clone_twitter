@@ -28,6 +28,19 @@
             else return false;
         }
 
+        public function checkUserName($username)
+        {
+            $stmt = $this->pdo->prepare("SELECT `name` FROM `users` WHERE `email` = :email ");
+            $stmt->bindParam(":name", $username, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $count = $stmt->rowCount();
+            if($count >0) {
+                return true;
+            }
+            else return false;
+        }
+
         public function login($email, $password)
         {
             $stmt = $this->pdo->prepare("
@@ -36,7 +49,8 @@
             ");
 
             $stmt->bindParam(":email", $email,PDO::PARAM_STR);
-            $stmt->bindParam(":password", $password,PDO::PARAM_STR);
+            $stmt->bindParam(":password", md5($password),PDO::PARAM_STR);
+
 
 
             $stmt->execute();
@@ -89,6 +103,50 @@
            $id = $this->pdo->lastInsertId();
            $_SESSION['id'] = $id;
 
+       }
+
+       public function create($table, $fields = array())
+       {
+            $columns  = implode(',', array_keys($fields));
+            $values = ":".implode(', :',array_keys($fields));
+            $sql = "INSERT INTO {$table} ({$columns}) values ({$values})";
+//            var_dump($sql);
+           if($stmt = $this->pdo->prepare($sql))
+           {
+               foreach ($fields as $key => $data)
+               {
+                   $stmt->bindValue(':'.$key, $data);
+               }
+               $stmt->execute();
+               return $this->pdo->lastInsertId();
+           }
+       }
+
+       public function update($table, $id, $fields = array())
+       {
+           $columns = '';
+            $i =1;
+
+           foreach ($fields as $name => $value)
+           {
+               $columns .= "`{$name}` = :{$name}";
+               if($i < count($fields))
+               {
+                   $columns .= ', ';
+
+               }
+               $i++;
+           }
+           $sql = "UPDATE {$table} SET {$columns} Where `id`= {$id}";
+           if($stmt = $this->pdo->prepare($sql))
+           {
+               foreach ($fields as $key => $value)
+               {
+                   $stmt->bindValue(':'.$key, $value);
+               }
+
+               $stmt->execute();
+           }
        }
 
 
