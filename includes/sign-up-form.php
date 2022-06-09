@@ -43,7 +43,7 @@
                         'password'=>md5($password),
                         'screenName'=>$screenName,
                         'profileImage' =>'assets/images/defaultProfileImage.png',
-                        'profileCover' =>'assets/images/defaultConverImage.png',
+                        'profileCover' =>'assets/images/defaultCoverImage.png',
 
                         ));
                     $_SESSION['id'] = $id;

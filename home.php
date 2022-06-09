@@ -1,10 +1,14 @@
 <?php
 include_once ('core/init.php');
-$id =  $_SESSION['id'];
+    $id =  $_SESSION['id'];
     $user = $getFromU->userData($id);
 //    $getFromU->update('users', $id ,array('name'=>'Trang','email'=>'huyentrang@gmail.com','password'=>md5('password')));
 //    var_dump();
-
+//    die($id);
+    if($getFromU->loggedIn() ===false)
+    {
+        header("Location: index.php");
+    }
     ?>
 <!--
    This template created by Meralesson.com
@@ -78,7 +82,7 @@ $id =  $_SESSION['id'];
                             <div class="info-inner">
                                 <div class="info-in-head">
                                     <!-- PROFILE-COVER-IMAGE -->
-                                    <img src="<?php echo $user->profileCover ?>"/>
+                                    <img src="<?php echo $user->profileCover;?>"/>
                                 </div><!-- info in head end -->
                                 <div class="info-in-body">
                                     <div class="in-b-box">

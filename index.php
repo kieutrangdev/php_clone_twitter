@@ -1,6 +1,8 @@
 <?php
     include_once ('core/init.php');
-
+    if(isset($_SESSION['id'])) {
+        header("Location: home.php");
+    }
 ?>
 <!--
    This template created by Meralesson.com

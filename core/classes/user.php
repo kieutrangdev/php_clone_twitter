@@ -74,7 +74,7 @@
         {
             $_SESSION = array();
             session_destroy();
-            header("location: ../index.php");
+            header('location: '.BASE_URL.'/index.php');
         }
 
 
@@ -149,6 +149,22 @@
            }
        }
 
+       public function userIdByUserName($name)
+       {
+           $stmt = $this->pdo->prepare("SELECT `id` FROM `users`
+                WHERE `name` =:name
+            ");
+
+           $stmt->bindParam(":name",$name,PDO::PARAM_STR);
+           $stmt->execute();
+           $user = $stmt->fetch(PDO::FETCH_OBJ);
+           return $user->id;
+       }
+
+       public function loggedIn()
+       {
+           return (isset($_SESSION['id'])) ? true : false;
+       }
 
 
 

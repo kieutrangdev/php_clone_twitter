@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([a-zA-z0-9_-]+)/?$ profile.php?username=$1 [QSA]
+
