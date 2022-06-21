@@ -7,6 +7,40 @@
     $id = $_SESSION['id'];
     $user = $getFromU->userData($id);
 
+    if(isset($_POST['screenName']))
+    {
+        if(!empty($_POST['screenName']))
+        {
+            $screenName = $getFromU->checkInput($_POST['screenName']);
+            $profileBio = $getFromU->checkInput($_POST['bio']);
+            $country      = $getFromU->checkInput($_POST['country']);
+            $website = $getFromU->checkInput($_POST['website']);
+            if(strlen($screenName) > 20)
+            {
+                $error = "Name must between in 6-20 charaters";
+            }
+            else if(strlen($profileBio) > 120)
+            {
+                $error = "Descroption is too long";
+            }
+            else if(strlen($country) > 80)
+            {
+                $error = "Country name is too long";
+            }
+            else {
+                $getFromU->update('users',$id,array('screenName'=>$screenName,'bio'=>$profileBio,'country'=>$country,'website'=>$website));
+                header('Location: '.$user->name);
+            }
+        }
+        else {
+            $error = "Name field can't be blink";
+        }
+
+    }
+    else $error = null;
+
+
+
 
 
 ?>
@@ -90,7 +124,7 @@
                                         <label for="file-up">
                                             Upload photo
                                         </label>
-                                        <input type="file" name="profileCover" id="file-up" />
+                                        <input type="file" name="profileCover" onchange=""  id="file-up" />
                                     </li>
                                     <li>
                                         <label for="cover-upload-btn">
@@ -189,7 +223,7 @@
                                                         <label for="profileImage">
                                                             Upload photo
                                                         </label>
-                                                        <input id="profileImage" type="file"  name="profileImage"/>
+                                                        <input id="profileImage" type="file" name="profileImage"/>
 
                                                     </li>
                                                     <li><a href="#">Remove</a></li>
@@ -208,11 +242,15 @@
 
                             <form id="editForm" method="post" enctype="multipart/Form-data">
                                 <div class="profile-name-wrap">
-                                    <!-- <ul>
-                                          <li class="error-li">
-                                              <div class="span-pe-error"></div>
-                                         </li>
-                                     </ul>  -->
+                                    <?php if(isset($error) && !empty($error)) { ?>
+                                    <ul>
+                                        <li class="error-li">
+                                              <div class="span-pe-error">
+                                                 <?php echo $error ?>
+                                              </div>
+                                       </li>
+                                     </ul>
+                                    <?php } ?>
                                     <div class="profile-name">
                                         <input type="text" name="screenName" value="<?php echo $user->screenName;?>"/>
                                     </div>
